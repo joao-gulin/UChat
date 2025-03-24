@@ -62,6 +62,43 @@ app.post("/createChannel", async (req, res) => {
   res.json(channel);
 });
 
+app.get("/servers", async (req, res) => {
+  const servers = await prisma.server.findMany({
+    include: {
+      channels: true,
+    },
+  });
+  res.json(servers);
+});
+
+// Get channels for a specific server
+app.get("/channels", async (req, res) => {
+  const { serverId } = req.query;
+  const channels = await prisma.channel.findMany({
+    where: {
+      serverId: String(serverId),
+    },
+  });
+  res.json(channels);
+});
+
+// Get messages for a specific channel
+app.get("/messages", async (req, res) => {
+  const { channelId } = req.query;
+  const messages = await prisma.message.findMany({
+    where: {
+      channelId: String(channelId),
+    },
+    include: {
+      user: true,
+    },
+    orderBy: {
+      createdAt: "asc",
+    },
+  });
+  res.json(messages);
+});
+
 const PORT = process.env.PORT || 5050;
 
 server.listen(PORT, () => {
