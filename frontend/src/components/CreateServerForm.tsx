@@ -26,7 +26,7 @@ export const CreateServerForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-2">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-2 mt-5">
         <FormField
           control={form.control}
           name="name"
@@ -38,7 +38,9 @@ export const CreateServerForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">Create</Button>
+        <Button type="submit" className="cursor-pointer">
+          Create
+        </Button>
       </form>
     </Form>
   );
