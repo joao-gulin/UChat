@@ -1,45 +1,13 @@
-import { useRef, useState } from "react";
-import "./App.css";
-import Send from "./components/send";
-import { Immer } from "immer";
+import { useState } from "react";
 
 function App() {
-  const [username, setUsername] = useState("");
-  const [connected, setConnected] = useState(false);
-  const [currentChat, setCurrentChat] = useState({
-    isChannel: true,
-    chatName: "general",
-    receiverId: "",
-  });
-  const [connectedRooms, setConnectedRooms] = useState(["general"]);
-  const [allUsers, setAllUsers] = useState([]);
-  const [messages, setMessages] = useState(initalMessage);
-  const [message, setMessage] = useState("");
-  const socketRef = useRef();
+  const [selectedServer, setSelectedServer] = useState<string | null>(null);
 
-  function handleMessageChange(e) {
-    setMessage(e.target.value);
-  }
-
-  function sendMessage() {
-    const payload = {
-      content: message,
-      to: currentChat.isChannel ? currentChat.chatName : currentChat.receiverId,
-      sender: username,
-      chatName: currentChat.chatName,
-      isChannel: currentChat.isChannel,
-    };
-    socketRef.current.emit("send message", payload);
-    const newMessages = Immer(messages, (draft) => {
-      draft[currentChat.chatName].push({
-        sender: username,
-        content: message,
-      });
-    });
-  }
   return (
-    <div>
-      <Send />
+    <div className="flex h-screen bg-gray-100">
+      <div className="flex flex-col w-64 bg-white border-r">
+        <div className="p-4 bg-gray-50 border-b"></div>
+      </div>
     </div>
   );
 }

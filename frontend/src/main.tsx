@@ -5,14 +5,12 @@ import App from "./App.tsx";
 import { BrowserRouter } from "react-router";
 import { Routes } from "react-router";
 import { Route } from "react-router";
-import Receive from "./components/receive.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} />
-        <Route path="/receive" element={<Receive />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,
