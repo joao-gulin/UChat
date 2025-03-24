@@ -9,14 +9,15 @@ export const ServerList = ({
   const { data: servers } = useServers();
 
   return (
-    <div className="flex-1 overflow-y-auto">
+    <div className="p-2 space-x-1">
       {servers?.map((server) => (
         <Button
           key={server.id}
           onClick={() => onSelectServer(server.id)}
-          className="w-full p-4 text-left hover:bg-gray-50 focus:outline-none focus:bg-blue-50"
+          variant={"ghost"}
+          className="w-full justify-start cursor-pointer"
         >
-          <span className="font-medium">{server.name}</span>
+          <span className="truncate">{server.name}</span>
         </Button>
       ))}
     </div>

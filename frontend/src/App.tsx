@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { ServerList } from "./components/ServerList";
 import { CreateServerForm } from "./components/CreateServerForm";
+import { Separator } from "./components/ui/separator";
+import { ScrollArea } from "@radix-ui/react-scroll-area";
 
 function App() {
   const [selectedServer, setSelectedServer] = useState<string | null>(null);
@@ -11,7 +13,10 @@ function App() {
         <div className="p-4 bg-gray-50 border-b">
           <CreateServerForm />
         </div>
-        <ServerList onSelectServer={setSelectedServer} />
+        <Separator />
+        <ScrollArea className="flex-1">
+          <ServerList onSelectServer={setSelectedServer} />
+        </ScrollArea>
       </div>
     </div>
   );
