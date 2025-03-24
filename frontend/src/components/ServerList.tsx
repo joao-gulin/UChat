@@ -1,5 +1,5 @@
 // src/components/ServerList.tsx
-import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogTrigger, DialogContent } from "./ui/dialog";
 import { ServerIcon, ServerIconSkeleton } from "./ServerIcon";
 import { CreateServerForm } from "./CreateServerForm";
 import { Button } from "./ui/button";

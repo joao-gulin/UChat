@@ -2,7 +2,13 @@
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { useForm } from "react-hook-form";
-import { Form, FormControl, FormField, FormItem } from "../components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "../components/ui/form";
 import { api } from "../api/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
