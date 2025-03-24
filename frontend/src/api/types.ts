@@ -1,6 +1,7 @@
 export type Server = {
   id: string;
   name: string;
+  channels: Channel[];
 };
 
 export type Channel = {
@@ -15,4 +16,9 @@ export type Message = {
   userId: string;
   channelId: string;
   createdAt: string;
+  user: {
+    id: string;
+    username: string;
+    email: string;
+  };
 };

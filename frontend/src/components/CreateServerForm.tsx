@@ -1,41 +1,45 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+// src/components/CreateServerForm.tsx
+import { Input } from "../components/ui/input";
+import { Button } from "../components/ui/button";
+import { useForm } from "react-hook-form";
+import { Form, FormControl, FormField, FormItem } from "../components/ui/form";
 import { api } from "../api/axios";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const CreateServerForm = () => {
-  const [name, setName] = useState("");
+  const form = useForm({ defaultValues: { name: "" } });
   const queryClient = useQueryClient();
+
   const { mutate: createServer } = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (name: string) => {
       await api.post("/createServer", { name });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["servers"] });
-      setName("");
+      form.reset();
     },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (name.trim()) createServer();
+  const onSubmit = (values: { name: string }) => {
+    createServer(values.name);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Input
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="New server name"
-        className="flex-1 px-2 py-1 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
-      />
-      <Button
-        type="submit"
-        className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-500"
-      >
-        Create
-      </Button>
-    </form>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-2">
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem className="flex-1">
+              <FormControl>
+                <Input placeholder="New server name" {...field} />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <Button type="submit">Create</Button>
+      </form>
+    </Form>
   );
 };
