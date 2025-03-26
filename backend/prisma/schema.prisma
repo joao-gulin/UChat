@@ -40,8 +40,8 @@ model Message {
   id        String   @id @default(uuid())
   content   String
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  channelId String?
-  channel   Channel? @relation(fields: [channelId], references: [id])
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  channelId String
+  channel   Channel? @relation(fields: [channelId], references: [id], onDelete: SetNull)
   createdAt DateTime @default(now())
 }

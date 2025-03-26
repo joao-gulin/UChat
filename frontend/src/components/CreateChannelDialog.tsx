@@ -26,26 +26,25 @@ export const CreateChannelDialog = ({ serverId }: { serverId: string }) => {
   const queryClient = useQueryClient();
   const form = useForm({ defaultValues: { name: "" } });
 
-  const { mutate: createChannel } = useMutation({
-    mutationFn: async (values: { name: string }) => {
-      try {
-        await api.post("/createChannel", {
-          name: values.name,
-          serverId,
-        });
-      } catch (error) {
-        toast.error("Failed to create channel", {
-          icon: <XCircle className="h-4 w-4" />,
-        });
-        throw error;
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["channels", serverId] });
+  const createChannel = async (name: string) => {
+    try {
+      await api.post("/channels", {
+        name,
+        serverId,
+      });
+      toast({
+        title: "Channel created",
+        description: `${name} has been created.`,
+      });
       form.reset();
-      toast.success("Channel created successfully");
-    },
-  });
+    } catch (error) {
+      toast({
+        title: "Failed to create channel",
+        description: "Please try again later.",
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <Dialog>
@@ -62,7 +61,7 @@ export const CreateChannelDialog = ({ serverId }: { serverId: string }) => {
 
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit((values) => createChannel(values))}
+            onSubmit={form.handleSubmit((values) => createChannel(values.name))}
             className="space-y-4"
           >
             <FormField

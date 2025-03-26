@@ -1,6 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
 import { api } from "../api/axios";
-import { Server } from "../api/types";
+import { useQuery } from "@tanstack/react-query";
+
+export interface Server {
+  id: string;
+  name: string;
+  channels: any[];
+}
 
 export const useServers = () => {
   return useQuery({

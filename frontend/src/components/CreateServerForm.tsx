@@ -11,6 +11,7 @@ import {
 } from "../components/ui/form";
 import { api } from "../api/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 export const CreateServerForm = () => {
   const form = useForm({ defaultValues: { name: "" } });
@@ -18,11 +19,16 @@ export const CreateServerForm = () => {
 
   const { mutate: createServer } = useMutation({
     mutationFn: async (name: string) => {
-      await api.post("/createServer", { name });
+      await api.post("/servers", { name });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["servers"] });
       form.reset();
+      toast.success("Server created!");
+    },
+    onError: (error) => {
+      toast.error("Failed to create server");
+      console.error(error);
     },
   });
 

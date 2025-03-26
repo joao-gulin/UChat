@@ -1,9 +1,10 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useSocket } from "../context/socket-context";
 import { useForm } from "react-hook-form";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Form, FormControl, FormField } from "./ui/form";
+import { useMessages } from "../hooks/use-messages";
 
 interface MessageFormData {
   content: string;
@@ -11,14 +12,21 @@ interface MessageFormData {
 
 export const MessageInput = ({ channelId }: { channelId: string }) => {
   const { socket } = useSocket();
+  const { sendMessage } = useMessages(channelId);
   const form = useForm<MessageFormData>({ defaultValues: { content: "" } });
   const [isTyping, setIsTyping] = useState(false);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  useEffect(() => {
+    if (socket && channelId) {
+      socket.emit("joinChannel", channelId);
+    }
+  }, [socket, channelId]);
+
   const handleTyping = () => {
     if (!isTyping) {
       setIsTyping(true);
-      socket?.emit("typing", { channelId });
+      socket?.emit("typing", { channelId, userId: socket.id, username: "User" });
     }
 
     if (typingTimeoutRef.current) {
@@ -27,16 +35,17 @@ export const MessageInput = ({ channelId }: { channelId: string }) => {
 
     typingTimeoutRef.current = setTimeout(() => {
       setIsTyping(false);
-      socket?.emit("stopTyping", { channelId });
+      socket?.emit("stopTyping", { channelId, userId: socket.id });
     }, 1000);
   };
 
   const onSubmit = (data: MessageFormData) => {
-    if (!data.content.trim()) return;
+    if (!data.content.trim() || !socket?.id) return;
 
-    socket?.emit("message", {
+    sendMessage({
       channelId,
       content: data.content.trim(),
+      userId: socket.id,
     });
 
     form.reset();
