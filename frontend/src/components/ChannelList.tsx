@@ -3,6 +3,7 @@ import { ScrollArea } from "./ui/scroll-area";
 import { Button } from "./ui/button";
 import { X } from "lucide-react";
 import { useChannels } from "../hooks/use-channel";
+import { CreateChannelDialog } from "./CreateChannelDialog";
 import { Skeleton } from "./ui/skeleton";
 import { useState } from "react";
 
@@ -35,7 +36,9 @@ export const ChannelList = ({
       <div className="flex-1 flex">
         {/* Channel List */}
         <div className="w-64 border-r">
-          <div className="p-2"></div>
+          <div className="p-2">
+            <CreateChannelDialog serverId={serverId} />
+          </div>
           <ScrollArea className="h-full p-2">
             {isLoading ? (
               <div className="space-y-2">
