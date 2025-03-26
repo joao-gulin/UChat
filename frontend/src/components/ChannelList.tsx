@@ -10,12 +10,19 @@ import { useState } from "react";
 export const ChannelList = ({
   serverId,
   onClose,
+  onChannelSelect,
 }: {
   serverId: string;
   onClose: () => void;
+  onChannelSelect: (channelId: string) => void;
 }) => {
   const [selectedChannel, setSelectedChannel] = useState<string | null>(null);
   const { data: channels, isLoading } = useChannels(serverId);
+
+  const handleChannelSelect = (channelId: string) => {
+    setSelectedChannel(channelId);
+    onChannelSelect(channelId);
+  };
 
   return (
     <div className="flex flex-col h-full">
@@ -33,41 +40,36 @@ export const ChannelList = ({
         </div>
       </div>
 
-      <div className="flex-1 flex">
-        {/* Channel List */}
-        <div className="w-64 border-r">
-          <div className="p-2">
-            <CreateChannelDialog serverId={serverId} />
-          </div>
-          <ScrollArea className="h-full p-2">
-            {isLoading ? (
-              <div className="space-y-2">
-                {Array(5)
-                  .fill(0)
-                  .map((_, i) => (
-                    <Skeleton key={i} className="h-8 w-full rounded" />
-                  ))}
-              </div>
-            ) : (
-              <div className="space-y-1">
-                {channels?.map((channel) => (
-                  <Button
-                    key={channel.id}
-                    variant={
-                      selectedChannel === channel.id ? "secondary" : "ghost"
-                    }
-                    className="w-full justify-start"
-                    onClick={() => setSelectedChannel(channel.id)}
-                  >
-                    # {channel.name}
-                  </Button>
-                ))}
-              </div>
-            )}
-          </ScrollArea>
+      <div className="flex-1">
+        <div className="p-2">
+          <CreateChannelDialog serverId={serverId} />
         </div>
-
-        {/* Message List */}
+        <ScrollArea className="h-full p-2">
+          {isLoading ? (
+            <div className="space-y-2">
+              {Array(5)
+                .fill(0)
+                .map((_, i) => (
+                  <Skeleton key={i} className="h-8 w-full rounded" />
+                ))}
+            </div>
+          ) : (
+            <div className="space-y-1">
+              {channels?.map((channel) => (
+                <Button
+                  key={channel.id}
+                  variant={
+                    selectedChannel === channel.id ? "secondary" : "ghost"
+                  }
+                  className="w-full justify-start"
+                  onClick={() => handleChannelSelect(channel.id)}
+                >
+                  # {channel.name}
+                </Button>
+              ))}
+            </div>
+          )}
+        </ScrollArea>
       </div>
     </div>
   );

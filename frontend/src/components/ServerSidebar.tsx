@@ -1,5 +1,5 @@
 // src/components/ServerSidebar.tsx
-import { useState } from "react";
+import { useState, Dispatch, SetStateAction } from "react";
 import { ServerIcon, ServerIconSkeleton } from "./ServerIcon";
 import { ScrollArea } from "./ui/scroll-area";
 import { Button } from "./ui/button";
@@ -11,7 +11,11 @@ import { ChannelList } from "./ChannelList";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "../lib/utils";
 
-export const ServerSidebar = () => {
+export const ServerSidebar = ({
+  onChannelSelect,
+}: {
+  onChannelSelect: Dispatch<SetStateAction<string | null>>;
+}) => {
   const [selectedServer, setSelectedServer] = useState<string | null>(null);
   const { data: servers, isLoading } = useServers();
 
@@ -71,6 +75,7 @@ export const ServerSidebar = () => {
             <ChannelList
               serverId={selectedServer}
               onClose={() => setSelectedServer(null)}
+              onChannelSelect={onChannelSelect}
             />
           </motion.div>
         )}
